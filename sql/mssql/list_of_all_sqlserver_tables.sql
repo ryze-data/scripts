@@ -1,12 +1,12 @@
 -- create table with only the names of databases that are published
 SELECT 
-name as databasename
+NAME AS databasename
 INTO #alldatabases
 FROM sys.databases WHERE database_id > 4
 CREATE TABLE #alltablesizes(
 servername sysname,
 databasename sysname,
-schemaName sysname,
+schemaname sysname,
 tablename sysname,
 rowcounts INT,
 totalspaceKB DECIMAL(18,2),
@@ -22,7 +22,7 @@ IF DB_NAME() IN (SELECT databasename FROM #alldatabases)
 BEGIN
 INSERT #alltablesizes
 SELECT 
-@@servername as servername,
+LOWER(@@servername) as servername,
 db_name() as databasename,    
     s.name AS schemaname,
 t.name AS tablename,
@@ -44,7 +44,7 @@ GROUP BY
 t.name, s.name, p.Rows
 END';
 EXEC sp_MSforeachdb @command
-select * from #alltablesizes
-order by 5 desc
-drop table #alltablesizes
-drop table #alldatabases
+SELECT * FROM #alltablesizes
+ORDER BY 7 ASC,5 ASC
+DROP TABLE #alltablesizes
+DROP TABLE #alldatabases
